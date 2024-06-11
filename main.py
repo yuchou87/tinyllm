@@ -2,11 +2,12 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from routers.home import home_router
+from routers.llm import llm_router
 
 app = FastAPI(
-    title="lark_chat_bot Server",
+    title="tiny llm server",
     version="1.0",
-    description="A webhook chat bot",
+    description="a tiny llm server",
 )
 
 app.add_middleware(
@@ -19,6 +20,7 @@ app.add_middleware(
 )
 
 app.include_router(router=home_router)
+app.include_router(router=llm_router)
 
 
 if __name__ == "__main__":
