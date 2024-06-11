@@ -1,12 +1,12 @@
 import os
 
-from pydantic import BaseSettings
+from pydantic import BaseSettings, SecretStr
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class Settings(BaseSettings):
-    GROQ_API_KEY: str
+    GROQ_API_KEY: SecretStr
 
     class Config:
         env_file = f'{BASE_DIR}/.env'

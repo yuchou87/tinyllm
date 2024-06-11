@@ -1,8 +1,7 @@
-from langchain_core.messages import BaseMessage
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnableSerializable, ConfigurableField, ConfigurableFieldSingleOption
+from langchain_core.runnables import ConfigurableField, ConfigurableFieldSingleOption
 from langchain_groq import ChatGroq
 
+from providers.base import BaseProvider
 from settings import settings
 
 
@@ -21,9 +20,10 @@ options = {
 }
 
 
-class GroqProvider(object):
+class GroqProvider(BaseProvider):
 
     def __init__(self, model: str = GroqModel.default_model):
+        super().__init__(model)
         self.llm = ChatGroq(model_name=model, groq_api_key=settings.GROQ_API_KEY).configurable_fields(
             temperature=ConfigurableField(
                 id="llm_temperature",
@@ -38,10 +38,3 @@ class GroqProvider(object):
                 default=GroqModel.default_model
             )
         )
-
-    def base_chain(self) -> RunnableSerializable[dict, BaseMessage]:
-        system = "You are a helpful assistant."
-        human = "{text}"
-        prompt = ChatPromptTemplate.from_messages([("system", system), ("human", human)])
-
-        return prompt | self.llm
